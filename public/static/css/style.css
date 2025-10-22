@@ -1,0 +1,21 @@
+.but{
+  width: 50px;
+  height: 50px;
+  font-size: xx-large;
+}
+.butClickUser{
+  background-color: rgb(123, 223, 41);
+  /* background-color: rgb(125, 247, 25); */
+}
+
+.butClickComp{
+  background-color: rgb(243, 199, 199);
+  
+}
+
+.divInput{
+  width: 900px;
+  height: 500px;
+  overflow: scroll;
+  border: solid 2px green
+}
