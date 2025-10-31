@@ -1,6 +1,6 @@
 .but{
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   font-size: xx-large;
 }
 .butClickUser{
@@ -18,4 +18,18 @@
   height: 500px;
   overflow: scroll;
   border: solid 2px green
+}
+.winComp{
+  background-color: rgb(235, 135, 135)
+}
+.winUser{
+  background-color: rgb(19, 243, 224)
+}
+.classGame{
+  border-right: 2px solid black;
+  /* display: inline-block; */
+  padding-right: 20pt;
+}
+.classCount{
+  
 }
