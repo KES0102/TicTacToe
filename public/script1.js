@@ -1,11 +1,36 @@
+// Скрипт для игры с компьютером
 const table = document.getElementById("table");
-table.addEventListener("click", clickUser);
 const array = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 let counter = 1;
 let compFirst = false;
-if (Math.random() < 0.5) {
-  compFirst = true;
-  goComp();
+
+let modeSelect = document.getElementById("mode");
+modeSelect.addEventListener("change", checkMode);
+startGameWithPC();
+
+// Настройка режима после события выбора
+function checkMode(e) {
+  // Если переключились на PC
+  console.log("mode PC");
+  if (e.target.value === "PC") {
+    resetGame();
+    startGameWithPC();
+    //table.removeEventListener("click", clickUser);
+  } else startGame1x1();
+}
+
+function startGameWithPC() {
+  table.addEventListener("click", clickUser);
+  try {
+    table.removeEventListener("click", click1x1);
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  if (Math.random() < 0.5) {
+    compFirst = true;
+    goComp();
+  }
 }
 
 function clickUser(event) {
@@ -20,13 +45,16 @@ function clickUser(event) {
     array[button.getAttribute("id")] = 1;
     //console.log(array);
     counter++;
-    checkWinerAll(1);
+    if (checkWinerAll(1) == 1) {
+      return;
+    }
     goComp();
   }
 }
 
 function goComp() {
   // Если комп ходит первый - в центр
+  console.log(counter);
   if (counter == 1) {
     array[4] = 2;
     const elem = document.getElementById(4);
@@ -265,6 +293,7 @@ function goComp() {
 
 // Находит победителя и заканчивает игру || -1
 function checkWinerAll(winer) {
+  let result;
   let arrTemp = [
     [array[0], array[1], array[2]],
     [array[3], array[4], array[5]],
@@ -273,22 +302,21 @@ function checkWinerAll(winer) {
 
   // Проверка строк на победу
   for (let i = 0; i < arrTemp.length; i++) {
-    // перебор строк
     const [a, b, c] = arrTemp[i]; // a,b,c хранят строку-ходы(0|1|2)
     // a&&b&&c
     if ((a == 1 && b == 1 && c == 1) || (a == 2 && b == 2 && c == 2)) {
       switch (i) {
         case 0:
-          endWithWinner(0, 1, 2, winer);
+          result = endWithWinner(0, 1, 2, winer);
           break;
         case 1:
-          endWithWinner(3, 4, 5, winer);
+          result = endWithWinner(3, 4, 5, winer);
           break;
         case 2:
-          endWithWinner(6, 7, 8, winer);
+          result = endWithWinner(6, 7, 8, winer);
           break;
       }
-      return;
+      return result;
     }
   }
 
@@ -304,16 +332,16 @@ function checkWinerAll(winer) {
     if ((a == 1 && b == 1 && c == 1) || (a == 2 && b == 2 && c == 2)) {
       switch (i) {
         case 0:
-          endWithWinner(0, 3, 6, winer);
+          result = endWithWinner(0, 3, 6, winer);
           break;
         case 1:
-          endWithWinner(1, 4, 7, winer);
+          result = endWithWinner(1, 4, 7, winer);
           break;
         case 2:
-          endWithWinner(2, 5, 8, winer);
+          result = endWithWinner(2, 5, 8, winer);
           break;
       }
-      return;
+      return result;
     }
   }
 
@@ -322,15 +350,15 @@ function checkWinerAll(winer) {
     (array[0] == 1 && array[4] == 1 && array[8] == 1) ||
     (array[0] == 2 && array[4] == 2 && array[8] == 2)
   ) {
-    endWithWinner(0, 4, 8, winer);
-    return;
+    result = endWithWinner(0, 4, 8, winer);
+    return result;
   }
   if (
     (array[2] == 1 && array[4] == 1 && array[6] == 1) ||
     (array[2] == 2 && array[4] == 2 && array[6] == 2)
   ) {
-    endWithWinner(2, 4, 6, winer);
-    return;
+    result = endWithWinner(2, 4, 6, winer);
+    return result;
   }
 
   function endWithWinner(a, b, c, winer) {
@@ -339,14 +367,14 @@ function checkWinerAll(winer) {
       (item, index) => (document.getElementById(index).disabled = true)
     );
     if (winer == 1) {
-      document.getElementById(a).style.backgroundColor = "#18eb05ff";
-      document.getElementById(b).style.backgroundColor = "#18eb05ff";
-      document.getElementById(c).style.backgroundColor = "#18eb05ff";
-      return;
+      document.getElementById(a).classList.add("winUser");
+      document.getElementById(b).classList.add("winUser");
+      document.getElementById(c).classList.add("winUser");
+      return 1;
     } else {
-      document.getElementById(a).style.backgroundColor = "#e65f47ff";
-      document.getElementById(b).style.backgroundColor = "#e65f47ff";
-      document.getElementById(c).style.backgroundColor = "#e65f47ff";
+      document.getElementById(a).classList.add("winComp");
+      document.getElementById(b).classList.add("winComp");
+      document.getElementById(c).classList.add("winComp");
       return;
     }
   }
@@ -505,4 +533,23 @@ function writeComp(value) {
   counter++;
   checkWinerAll(2);
   return;
+}
+
+// Сброс игрового процесса
+function resetGame() {
+  //const table = document.getElementById("table");
+  //console.log("1");
+  for (let tr of table.rows) {
+    //console.log(tr);
+    for (let td of tr.cells) {
+      //console.log(td.firstElementChild);
+      td.firstElementChild.innerText = "";
+      td.firstElementChild.classList.remove("butClickUser", "butClickComp");
+      td.firstElementChild.classList.remove("winUser", "winComp");
+      td.firstElementChild.disabled = false;
+      array[td.firstElementChild.getAttribute("id")] = 0;
+    }
+  }
+  //counter = 1;
+  //console.log(array);
 }
