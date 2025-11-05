@@ -366,15 +366,21 @@ function checkWinerAll(winer) {
     array.map(
       (item, index) => (document.getElementById(index).disabled = true)
     );
+
+    // Победил user
     if (winer == 1) {
       document.getElementById(a).classList.add("winUser");
       document.getElementById(b).classList.add("winUser");
       document.getElementById(c).classList.add("winUser");
+      inkWins(1)
       return 1;
+
+      // Победил  компьютер
     } else {
       document.getElementById(a).classList.add("winComp");
       document.getElementById(b).classList.add("winComp");
       document.getElementById(c).classList.add("winComp");
+      inkWins(2)
       return;
     }
   }
@@ -552,4 +558,17 @@ function resetGame() {
   }
   //counter = 1;
   //console.log(array);
+}
+
+// Инкрементирует счетчик победителя
+function inkWins(winner){
+  switch(winner){
+    case 1:
+      userGreen.textContent=parseInt(userGreen.textContent)+1;
+      break;
+    case 2:
+      userRed.textContent=parseInt(userRed.textContent)+1;  
+  }
+  
+  //console.log(parseInt(userGreen.textContent)+1);
 }
