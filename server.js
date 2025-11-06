@@ -8,4 +8,4 @@ app.get("/", (req, res) => {
 // app.use(function (_, response) {
 //   response.sendFile(__dirname + "/public/static/index.html");
 // });
-app.listen(3000, () => console.log("server starting on 3000 PORT"));
+app.listen(8080, () => console.log("server starting on 8080 PORT"));
