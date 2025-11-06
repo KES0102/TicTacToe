@@ -1,9 +1,9 @@
 // Скрипт для игры 1 x 1
-let userActivity = true; //red
+let userActivity = true; //green
 function startGame1x1() {
   console.log("1x1 start");
   table.addEventListener("click", click1x1);
-  resetGame();
+  resetGame(true);
   table.removeEventListener("click", clickUser);
 }
 
@@ -19,7 +19,7 @@ function click1x1(event) {
       button.innerText = "X";
       button.disabled = true;
       array[button.getAttribute("id")] = 1;
-      console.log(array);
+      //console.log(array);
       if (checkWinerAll(1) == 1) return;
     }
     if (!userActivity) {

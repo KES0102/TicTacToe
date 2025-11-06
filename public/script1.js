@@ -11,9 +11,8 @@ startGameWithPC();
 // Настройка режима после события выбора
 function checkMode(e) {
   // Если переключились на PC
-  console.log("mode PC");
   if (e.target.value === "PC") {
-    resetGame();
+    resetGame(true);
     startGameWithPC();
     //table.removeEventListener("click", clickUser);
   } else startGame1x1();
@@ -366,15 +365,21 @@ function checkWinerAll(winer) {
     array.map(
       (item, index) => (document.getElementById(index).disabled = true)
     );
+
+    // Победил user
     if (winer == 1) {
       document.getElementById(a).classList.add("winUser");
       document.getElementById(b).classList.add("winUser");
       document.getElementById(c).classList.add("winUser");
+      inkWins(1);
       return 1;
+
+      // Победил  компьютер
     } else {
       document.getElementById(a).classList.add("winComp");
       document.getElementById(b).classList.add("winComp");
       document.getElementById(c).classList.add("winComp");
+      inkWins(2);
       return;
     }
   }
@@ -536,20 +541,38 @@ function writeComp(value) {
 }
 
 // Сброс игрового процесса
-function resetGame() {
-  //const table = document.getElementById("table");
-  //console.log("1");
+function resetGame(resCounter) {
   for (let tr of table.rows) {
-    //console.log(tr);
     for (let td of tr.cells) {
-      //console.log(td.firstElementChild);
       td.firstElementChild.innerText = "";
       td.firstElementChild.classList.remove("butClickUser", "butClickComp");
       td.firstElementChild.classList.remove("winUser", "winComp");
       td.firstElementChild.disabled = false;
       array[td.firstElementChild.getAttribute("id")] = 0;
+      if (resCounter) {
+        userGreen.innerText = 0;
+        userRed.innerText = 0;
+      }
     }
   }
-  //counter = 1;
+  counter = 1;
   //console.log(array);
+}
+
+// Инкрементирует счетчик победителя
+function inkWins(winner) {
+  switch (winner) {
+    case 1:
+      userGreen.textContent = parseInt(userGreen.textContent) + 1;
+      break;
+    case 2:
+      userRed.textContent = parseInt(userRed.textContent) + 1;
+  }
+
+  //console.log(parseInt(userGreen.textContent)+1);
+}
+
+// Слушатель кнопки Далее - сброс поля
+function nextGame() {
+  resetGame();
 }
